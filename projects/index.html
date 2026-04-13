@@ -1,0 +1,185 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html title="Projects" description="Side projects by Florian Preis — reading tools, travel maps, geography quizzes." %}
+  <style>
+    .projects {
+      flex: 1;
+      padding: 64px 52px 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .projects-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 40px;
+    }
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 340px;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      transition: background .2s;
+    }
+    .project-card:hover { background: #fafafa; }
+    .project-info {
+      padding: 48px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+    .project-preview {
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+    .project-preview img,
+    .project-preview svg { width: 100%; height: 100%; display: block; }
+    .project-tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 12px;
+    }
+    .project-title {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .project-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    .project-cta {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap .2s;
+    }
+    .project-card:hover .project-cta { gap: 10px; }
+
+    @media (max-width: 900px) {
+      .project-card { grid-template-columns: 1fr; height: auto; }
+      .project-info  { border-right: none; padding: 28px 24px 36px; }
+      .project-preview { order: 2; border-top: 1px solid var(--border); min-height: 200px; }
+    }
+    @media (max-width: 768px) {
+      .projects { padding: 40px 20px 80px; }
+      .project-title { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+{% include nav.html %}
+
+<div class="projects">
+  <p class="projects-label">Projects</p>
+
+  <!-- cogniflow ─────────────────────────────────────────────── -->
+  <a class="project-card" href="/projects/cogniflow/" target="_blank">
+    <div class="project-info">
+      <p class="project-tag">Reading Tool</p>
+      <h2 class="project-title">cogniflow</h2>
+      <p class="project-desc">A focused reading environment that presents text word-by-word at a custom speed. Supports EPUB, PDF, and plain text and includes a personal library saved locally in your browser.</p>
+      <span class="project-cta">Open &rarr;</span>
+    </div>
+    <div class="project-preview" style="background:#000">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <rect width="640" height="360" fill="#000"/>
+        <rect width="640" height="48" fill="#0a0a0a"/>
+        <rect y="48" width="640" height="1" fill="#1e1e1e"/>
+        <text x="32" y="30" font-family="Helvetica Neue,sans-serif" font-size="14" fill="#fff" dominant-baseline="middle"><tspan font-weight="700">cogni</tspan><tspan font-weight="400">flow</tspan></text>
+        <text x="608" y="24" font-family="Helvetica Neue,sans-serif" font-size="10" fill="#555" text-anchor="end">About</text>
+        <text x="548" y="24" font-family="Helvetica Neue,sans-serif" font-size="10" fill="#555" text-anchor="end">Library</text>
+        <text x="490" y="24" font-family="Helvetica Neue,sans-serif" font-size="10" fill="#fff" font-weight="500" text-anchor="end">Reader</text>
+        <rect x="0" y="76" width="640" height="160" fill="#000"/>
+        <text x="320" y="168" font-family="Georgia,serif" font-size="46" fill="#fff" text-anchor="middle" letter-spacing="-0.02em">Start reading</text>
+        <rect x="0" y="237" width="640" height="34" fill="#000"/>
+        <rect x="32" y="242" width="46" height="20" rx="10" fill="#fff"/>
+        <text x="55" y="256" font-family="Helvetica Neue,sans-serif" font-size="7.5" fill="#000" text-anchor="middle" letter-spacing="1">PLAY</text>
+        <rect x="192" y="250" width="420" height="1.5" rx="1" fill="#1a1a1a"/>
+        <rect x="0" y="272" width="640" height="88" fill="#000"/>
+        <rect x="214" y="272" width="1" height="88" fill="#1a1a1a"/>
+        <rect x="428" y="272" width="1" height="88" fill="#1a1a1a"/>
+        <text x="32" y="290" font-family="Helvetica Neue,sans-serif" font-size="6.5" fill="#444" letter-spacing="2">READING SPEED</text>
+        <rect x="32" y="306" width="148" height="1.5" rx="1" fill="#2a2a2a"/>
+        <circle cx="106" cy="307" r="6" fill="#fff700" stroke="#000" stroke-width="1.5"/>
+        <text x="190" y="311" font-family="Helvetica Neue,sans-serif" font-size="10" fill="#fff" text-anchor="end">300 WPM</text>
+        <defs><radialGradient id="vg" cx="50%" cy="50%" r="70%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.5"/></radialGradient></defs>
+        <rect width="640" height="360" fill="url(#vg)"/>
+      </svg>
+    </div>
+  </a>
+
+  <!-- travel diary ──────────────────────────────────────────── -->
+  <a class="project-card" href="/projects/travel-diary/" target="_blank">
+    <div class="project-info">
+      <p class="project-tag">Travel Diary</p>
+      <h2 class="project-title">gowiththeflo</h2>
+      <p class="project-desc">An interactive world map tracking every country I visited. Click any highlighted country to see trip notes, dates, and travel companions.</p>
+      <span class="project-cta">Open &rarr;</span>
+    </div>
+    <div class="project-preview" style="position:relative;overflow:hidden;">
+      <img src="/assets/img/travel-cover.jpg" alt="Travel diary preview" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.28);"></div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <span style="font-family:inherit;font-size:12px;font-weight:300;color:rgba(255,255,255,0.82);letter-spacing:8px;text-transform:uppercase;">Travel Diary</span>
+        <div style="margin-top:12px;width:224px;height:1.5px;background:rgba(255,255,255,0.18);border-radius:1px;overflow:hidden;">
+          <div style="width:60%;height:100%;background:rgba(255,255,255,0.70);"></div>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- knowhere ──────────────────────────────────────────────── -->
+  <a class="project-card" href="/projects/knowhere/" target="_blank">
+    <div class="project-info">
+      <p class="project-tag">Geography Quiz</p>
+      <h2 class="project-title">knowhere</h2>
+      <p class="project-desc">A geography quiz that tests your knowledge of flags, capitals, and country locations. Three modes, adjustable difficulty, and a personal mistakes log to track what trips you up.</p>
+      <span class="project-cta">Open &rarr;</span>
+    </div>
+    <div class="project-preview" style="background:#F7F3EE;overflow:hidden;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">
+        <rect width="640" height="360" fill="#F7F3EE"/>
+        {% assign flags = "gb,fr,de,jp,us,br,cn,in,au,ca,it,es,nl,se,no,dk,fi,pl,ch,at,za,ng,eg,ke,gh,ma,et,tz,sn,na,mx,ar,co,cl,pe,ve,ec,cu,gt,bo,kr,id,pk,bd,vn,th,my,ph,sg,np,ru,tr,ir,sa,ae,il,ua,gr,pt,be,nz,ug,dz,ci,cm,ro,hu,cz,sk,hr,lv,lt,ee,rs,bg,si,ba,al,mk,me" | split: "," %}
+        {% for flag in flags %}
+          {% assign i   = forloop.index0 %}
+          {% assign col = i | modulo: 10 %}
+          {% assign row = i | divided_by: 10 %}
+          {% assign x   = col | times: 66 %}
+          {% assign y   = row | times: 45 %}
+          <image href="https://flagcdn.com/w80/{{ flag }}.png" x="{{ x }}" y="{{ y }}" width="64" height="43" preserveAspectRatio="xMidYMid slice"/>
+        {% endfor %}
+        <rect width="640" height="360" fill="rgba(247,243,238,0.08)"/>
+      </svg>
+    </div>
+  </a>
+
+  <!-- Add future project cards here -->
+
+</div>
+
+{% include footer.html %}
+
+<script src="/assets/js/ui.js"></script>
+</body>
+</html>

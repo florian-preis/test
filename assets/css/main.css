@@ -1,0 +1,214 @@
+/* =====================================================
+   preis.works — main.css
+   Shared across: About · Photography · Projects · 404
+   Project apps (cogniflow, travel-diary, knowhere)
+   have their own style.css in their own folder.
+   ===================================================== */
+
+/* ── Reset ─────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Design tokens ──────────────────────────────────── */
+:root {
+  --bg:         #ffffff;
+  --text:       #111111;
+  --muted:      #888888;
+  --border:     #e5e5e5;
+  --nav-h:      68px;
+  --max-w:      1500px;
+  --footer-bg:  #d0cdc9;
+}
+
+/* ── Base ───────────────────────────────────────────── */
+html { scroll-behavior: smooth; overscroll-behavior: none; }
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Nav ────────────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  padding: 0 52px;
+  transition: background .45s cubic-bezier(.4,0,.2,1),
+              border-color .45s,
+              padding .45s cubic-bezier(.4,0,.2,1);
+}
+.nav.scrolled {
+  background: transparent;
+  border-bottom-color: transparent;
+  padding: 10px 52px;
+}
+.nav-inner {
+  width: 100%;
+  max-width: calc(var(--max-w) - 104px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
+  background: transparent;
+  transition: background .45s cubic-bezier(.4,0,.2,1),
+              border-radius .45s cubic-bezier(.4,0,.2,1),
+              padding .45s cubic-bezier(.4,0,.2,1),
+              box-shadow .45s cubic-bezier(.4,0,.2,1),
+              backdrop-filter .45s;
+}
+.nav.scrolled .nav-inner {
+  background: rgba(235,235,235,0.42);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-radius: 50px;
+  padding: 12px 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+.nav-logo {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-logo:hover { color: var(--muted); }
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color .2s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--text); }
+
+/* ── Hamburger ──────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text);
+  border-radius: 1px;
+  transition: transform .25s ease, opacity .25s ease;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Mobile drawer ──────────────────────────────────── */
+.nav-drawer {
+  display: none;
+  flex-direction: column;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 99;
+}
+.nav-drawer.open { display: flex; }
+.nav-drawer a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  transition: color .15s;
+}
+.nav-drawer a:last-child { border-bottom: none; }
+.nav-drawer a:hover,
+.nav-drawer a.active { color: var(--text); }
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer {
+  position: relative;
+  width: 100%;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--footer-bg);
+}
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.10;
+  animation: grain 8s steps(10,end) infinite;
+  pointer-events: none;
+}
+@keyframes grain {
+  0%   { transform: translate(0,0);    }
+  10%  { transform: translate(-3%,2%); }
+  20%  { transform: translate(2%,-3%); }
+  30%  { transform: translate(-2%,3%); }
+  40%  { transform: translate(3%,1%);  }
+  50%  { transform: translate(-1%,-2%);}
+  60%  { transform: translate(2%,3%);  }
+  70%  { transform: translate(-3%,-1%);}
+  80%  { transform: translate(1%,2%);  }
+  90%  { transform: translate(-2%,0%); }
+  100% { transform: translate(0,0);    }
+}
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-w);
+  padding: 0 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.footer-copy { font-size: 11px; letter-spacing: 0.04em; color: #333; }
+.footer-social { display: flex; gap: 18px; align-items: center; }
+.footer-social a {
+  color: #333;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity .2s;
+}
+.footer-social a:hover { opacity: 1; }
+.footer-social svg { width: 18px; height: 18px; }
+
+/* ── Breakpoint ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links  { display: none; }
+  .hamburger  { display: flex; }
+  .nav        { padding: 0 20px; }
+  .nav.scrolled { padding: 10px 20px; }
+  .nav-inner  { max-width: 100%; }
+  .footer-inner { padding: 0 20px; }
+}

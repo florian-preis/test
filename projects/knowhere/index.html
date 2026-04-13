@@ -1,0 +1,172 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>knowhere</title>
+  <meta name="description" content="Train your geography — flags, capitals, and locations quiz.">
+  <meta property="og:title"       content="knowhere">
+  <meta property="og:description" content="Train your geography — flags, capitals, and locations quiz.">
+  <meta property="og:url"         content="https://preis.works/projects/knowhere/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23F7F3EE'/%3E%3Ctext x='8' y='23' font-family='DM Sans,Helvetica Neue,sans-serif' font-size='20' font-weight='300' fill='%231A1A1A' opacity='0.45'%3Ek%3C/text%3E%3Ctext x='8' y='23' font-family='DM Sans,Helvetica Neue,sans-serif' font-size='20' font-weight='300' fill='%231A1A1A' opacity='1'%3Ek%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">knowhere</a>
+  <div class="nav-right">
+    <div class="npg">
+      <button class="np active" data-screen="home">Home</button>
+      <button class="np" data-screen="leaderboard">Results</button>
+    </div>
+    <div class="nib" id="settings-btn" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
+  </div>
+</nav>
+
+<div class="app-body">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="hw">
+      <div class="hh">
+        <div class="hh-t-wrap" style="text-align:center">
+          <div class="logo-anim" id="home-logo">
+            <span class="logo-know">know</span><span class="logo-gap"> </span><span class="logo-here">here</span>
+          </div>
+        </div>
+        <div class="hh-sub">Train your geography</div>
+      </div>
+      <div class="hmg">
+        <div class="hmc" data-mode="flags">
+          <svg class="hmc-svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="3" x2="7" y2="21"/>
+            <path d="M7 4 Q11 3 13 5 Q15 7 17 6 L17 13 Q15 14 13 12 Q11 10 7 11"/>
+          </svg>
+          <span class="hmc-lbl">Mode 1</span><span class="hmc-name">Flags</span>
+        </div>
+        <div class="hmc" data-mode="capitals">
+          <svg class="hmc-svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 10 Q12 5 16 10"/>
+            <rect x="5" y="10" width="14" height="8"/>
+            <line x1="8"  y1="10" x2="8"  y2="18"/>
+            <line x1="12" y1="10" x2="12" y2="18"/>
+            <line x1="16" y1="10" x2="16" y2="18"/>
+            <line x1="2"  y1="19" x2="22" y2="19"/>
+          </svg>
+          <span class="hmc-lbl">Mode 2</span><span class="hmc-name">Capitals</span>
+        </div>
+        <div class="hmc" data-mode="locations">
+          <svg class="hmc-svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="3.5"/>
+            <line x1="12" y1="11.5" x2="12" y2="21"/>
+          </svg>
+          <span class="hmc-lbl">Mode 3</span><span class="hmc-name">Locations</span>
+        </div>
+      </div>
+      <div id="hstats" class="hsr hidden">
+        <div><div class="hs-num" id="hs-r">0</div><div class="hs-lbl">Rounds</div></div>
+        <div><div class="hs-num" id="hs-b">—</div><div class="hs-lbl">Best</div></div>
+        <div><div class="hs-num" id="hs-s">0</div><div class="hs-lbl">Streak</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="screen" id="screen-leaderboard">
+    <div class="lbw">
+      <div class="lb-top">
+        <div class="lb-stitle">Results</div>
+        <div class="lb-tabs">
+          <button class="lb-tab active" data-lbmode="flags">Flags</button>
+          <button class="lb-tab" data-lbmode="capitals">Capitals</button>
+          <button class="lb-tab" data-lbmode="locations">Locations</button>
+        </div>
+      </div>
+      <div class="lb-split">
+        <div>
+          <div class="lb-col-title">Rounds</div>
+          <div id="lb-rounds"></div>
+        </div>
+        <div>
+          <div class="lb-col-title">Marathon streaks</div>
+          <div id="lb-marathon"></div>
+        </div>
+      </div>
+      <div class="lb-section-gap"></div>
+      <div class="lb-wrong-title">Mistakes log</div>
+      <div id="lb-wrong"></div>
+      <button class="lb-clear" id="lbclear">Clear history</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screen-quiz"></div>
+
+</div>
+
+<!-- Copyright -->
+<div style="position:fixed;bottom:16px;left:20px;z-index:50;pointer-events:none">
+  <span style="font-size:11px;color:var(--ink-3);letter-spacing:.2px">© Florian Preis <script>document.write(new Date().getFullYear())</script></span>
+</div>
+
+<!-- Settings drawer -->
+<div class="ov" id="ov"></div>
+<div class="drawer" id="drawer">
+  <div class="dpull"></div>
+  <div class="dhd"><span class="dhd-t">Settings</span><button class="dx" id="dx">&#x2715;</button></div>
+  <div class="ds">
+    <div class="ds-l">Regions</div>
+    <div class="cr c2">
+      <div class="chip on" data-g="region" data-v="europe">Europe</div>
+      <div class="chip on" data-g="region" data-v="asia">Asia</div>
+      <div class="chip on" data-g="region" data-v="africa">Africa</div>
+      <div class="chip on" data-g="region" data-v="americas">Americas</div>
+    </div>
+  </div>
+  <div class="ddiv"></div>
+  <div class="ds" style="margin-top:20px">
+    <div class="ds-l">Difficulty</div>
+    <div class="cr c3">
+      <div class="chip" data-g="diff" data-v="easy">Easy</div>
+      <div class="chip on" data-g="diff" data-v="medium">Medium</div>
+      <div class="chip" data-g="diff" data-v="hard">Hard</div>
+    </div>
+  </div>
+  <div class="ddiv"></div>
+  <div class="ds" style="margin-top:20px">
+    <div class="ds-l">Answer Style</div>
+    <div class="cr c2">
+      <div class="chip on" data-g="style" data-v="mc">Multiple choice</div>
+      <div class="chip" data-g="style" data-v="type">Type in</div>
+    </div>
+  </div>
+  <div class="ddiv"></div>
+  <div class="ds" style="margin-top:20px">
+    <div class="ds-l">Game Mode</div>
+    <div class="cr c2">
+      <div class="chip on" data-g="mode" data-v="rounds">Rounds of 10</div>
+      <div class="chip" data-g="mode" data-v="marathon">Marathon</div>
+    </div>
+  </div>
+  <div class="ddiv"></div>
+  <div class="ds" style="margin-top:20px">
+    <div class="ds-l">Display</div>
+    <div class="night-row">
+      <span style="font-size:13px;color:var(--ink)">Night mode</span>
+      <label class="nt"><input type="checkbox" id="night-toggle"><span class="nt-sl"></span></label>
+    </div>
+  </div>
+  <div class="dact"><button class="dsave" id="dsave">Save settings</button></div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>

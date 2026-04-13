@@ -1,0 +1,305 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html title="Photography" description="Travel photography by Florian Preis." og_image="/assets/img/travel-cover.jpg" %}
+  <style>
+    html { scrollbar-gutter: stable; }
+
+    /* ── Grid ── */
+    :root { --gap: clamp(6px, 1.5vw, 20px); }
+    .photo-page { flex: 1; padding: var(--gap) var(--gap) clamp(24px, 5vw, 64px); }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--gap);
+    }
+    .photo-item {
+      aspect-ratio: 3/2;
+      overflow: hidden;
+      cursor: pointer;
+      background: #f2f2f2;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .photo-item.visible { opacity: 1; transform: none; }
+    .photo-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+    }
+    .photo-item:hover img { transform: scale(1.05); }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 900;
+      background: #fff;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    #lb-stage {
+      position: relative; flex: 1; width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      padding: 52px 0 8px;
+    }
+    #lb-img {
+      max-width: calc(100vw - 160px);
+      max-height: calc(100vh - 132px);
+      object-fit: contain; display: block;
+    }
+    .lb-close {
+      position: absolute; top: 14px; right: 20px;
+      background: none; border: none; cursor: pointer;
+      padding: 6px; color: #111; opacity: .4; transition: opacity .2s;
+    }
+    .lb-close:hover { opacity: 1; }
+    .lb-close svg { width: 20px; height: 20px; }
+    .lb-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      padding: 14px; color: #111; opacity: .2; transition: opacity .2s;
+    }
+    .lb-arrow:hover { opacity: .7; }
+    .lb-arrow svg { width: 22px; height: 22px; }
+    .lb-prev { left: 16px; }
+    .lb-next { right: 16px; }
+    #lb-footer {
+      width: 100%; padding: 12px 80px 32px;
+      display: flex; justify-content: flex-start; align-items: flex-end; flex-shrink: 0;
+    }
+    #lb-meta { display: flex; flex-direction: column; gap: 2px; }
+    .lb-location { display: flex; align-items: flex-start; gap: 5px; }
+    .lb-caption  { font-size: 12px; color: #111; letter-spacing: .02em; line-height: 1.4; }
+    .lb-date-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .lb-date, .lb-count { font-size: 12px; color: #bbb; letter-spacing: .02em; }
+    .lb-date { padding-left: 19px; }
+
+    @media (max-width: 768px) {
+      .photo-grid { grid-template-columns: repeat(3, 1fr); }
+      :root { --gap: clamp(4px, 2vw, 12px); }
+      #lb-img { max-width: calc(100vw - 96px); }
+      #lb-footer { padding: 12px 48px 20px; }
+      .lb-arrow svg { width: 18px; height: 18px; }
+      .lb-prev { left: 4px; }
+      .lb-next { right: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+{% include nav.html %}
+
+<main class="photo-page">
+  <div class="photo-grid" id="photo-grid"></div>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <div id="lb-stage">
+    <button class="lb-close" onclick="closeLb()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <button class="lb-arrow lb-prev" onclick="navLb(-1)" aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <img id="lb-img" src="" alt="">
+    <button class="lb-arrow lb-next" onclick="navLb(1)" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+  <div id="lb-footer">
+    <div id="lb-meta">
+      <div class="lb-location">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="margin-top:1px"><circle cx="12" cy="7" r="4"/><line x1="12" y1="11" x2="12" y2="21"/></svg>
+        <span class="lb-caption" id="lb-caption"></span>
+      </div>
+      <div class="lb-date-row">
+        <span class="lb-date"  id="lb-date"></span>
+        <span class="lb-count" id="lb-count"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include footer.html %}
+
+<script>
+  /* ── ADDING A NEW PHOTO ──────────────────────────────────────────
+     1. Upload the JPG to this /photography/ folder on GitHub
+     2. Add one line to PHOTOS below:
+           "/photography/YYYYMMDD_Caption, Location.jpg"
+     Photos are sorted newest → oldest automatically.
+     Caption and date are parsed from the filename.
+     ──────────────────────────────────────────────────────────── */
+
+  const PHOTOS = [
+    "/photography/20260206_Amalienborg Palace, Copenhagen, Denmark.jpg",
+    "/photography/20260206_Nyhavn, Copenhagen, Denmark.jpg",
+    "/photography/20260103_View from Landmark 81 in Ho Chi Minh City, Vietnam.jpg",
+    "/photography/20260102_Ho Chi Minh City, Vietnam.jpg",
+    "/photography/20251223_Dong Xuan Market in Hanoi, Vietnam.jpg",
+    "/photography/20251011_Grenen, Skagen, Denmark.jpg",
+    "/photography/20250809_Frederiksberg Have, Denmark.jpg",
+    "/photography/20250731_Langkawi, Malaysia.jpg",
+    "/photography/20250725_George Town, Malaysia.jpg",
+    "/photography/20250722_Kuala Lumpur, Malaysia.jpg",
+    "/photography/20250721_Chinatown Complex, Singapore.jpg",
+    "/photography/20250719_Marina Bay Sands, Singapore.jpg",
+    "/photography/20250315_Skeleton Coast, Namibia.jpg",
+    "/photography/20250314_Spitzkoppe, Namibia.jpg",
+    "/photography/20250312_Sandwich Harbour, Namibia.jpg",
+    "/photography/20250310_Sossusvlei, Namibia.jpg",
+    "/photography/20250118_Bunker Feldstraße, Hamburg, Germany.jpg",
+    "/photography/20241101_Pyramid of Djoser, Cairo, Egypt.jpg",
+    "/photography/20240815_Kiambethu Tea Farm, Nairobi, Kenya.jpg",
+    "/photography/20240810_Lamu Island, Kenya.jpg",
+    "/photography/20240803_Amboseli National Park, Kenya.jpg",
+    "/photography/20240802_Amboseli National Park, Kenya.jpg",
+    "/photography/20240801_Mount Kilimanjaro, Kenya.jpg",
+    "/photography/20240730_The Great Migration, Maasai Mara National Reserve, Kenya.jpg",
+    "/photography/20240730_Maasai Mara National Reserve, Kenya.jpg",
+    "/photography/20240729_Maasai Mara National Reserve, Kenya.jpg",
+    "/photography/20240728_Nairobi National Park, Kenya.jpg",
+    "/photography/20240728_Sheldrick Wildlife Trust, Nairobi, Kenya.jpg",
+    "/photography/20240519_Lyngør Lighthouse, Kjeholmen, Norway.jpg",
+    "/photography/20240511_Santa Maddalena, Dolomites, Italy.jpg",
+    "/photography/20240510_Rifugio Lavaredo, Dolomites, Italy.jpg",
+    "/photography/20240510_Cadini di Misurina, Dolomites, Italy.jpg",
+    "/photography/20240427_Opera Park, Copenhagen, Denmark.jpg",
+    "/photography/20240406_Paraisópolis, São Paulo, Brazil.jpg",
+    "/photography/20240329_Cristo Redentor, Rio de Janeiro, Brazil.jpg",
+    "/photography/20240325_Copa Cabana Beach, Rio de Janeiro, Brazil.jpg",
+    "/photography/20240323_Salvador, Brazil.jpg",
+    "/photography/20240322_Salvador, Brazil.jpg",
+    "/photography/20240114_Proclamation of Frederik X. at Christiansborg Palace, Copenhagen, Denmark.jpg",
+    "/photography/20230721_Niagara Falls, Ontario, Canada.jpg",
+    "/photography/20230126_Entalula Beach in El Nido, Palawan, Philippines.jpg",
+    "/photography/20230124_Temple Street Night Market, Hong Kong.jpg",
+    "/photography/20230124_Mong Kok, Hong Kong.jpg",
+    "/photography/20230124_Choi Hung Estate, Hong Kong.jpg",
+    "/photography/20230123_Wong Tai Sin District, Hong Kong.jpg",
+    "/photography/20230123_Choi Hung Estate, Hong Kong.jpg",
+    "/photography/20220813_The Lakes, Copenhagen, Denmark.jpg",
+    "/photography/20220813_Frederiksberg Allé, Copenhagen, Denmark.jpg",
+  ];
+
+  /* ── Helpers ── */
+  const MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+
+  function parseSrc(src) {
+    const name  = decodeURIComponent(src).split('/').pop().replace(/\.[^.]+$/, '');
+    const match = name.match(/^(\d{4})(\d{2})(\d{2})_(.+)$/);
+    if (!match) return { caption: name, date: '' };
+    return {
+      caption: match[4].trim(),
+      date:    +match[3] + ' ' + MONTHS[+match[2] - 1] + ' ' + match[1],
+    };
+  }
+
+  /* ── Sort newest → oldest ── */
+  PHOTOS.sort((a, b) => {
+    const d = s => decodeURIComponent(s).split('/').pop().slice(0, 8);
+    return d(b).localeCompare(d(a));
+  });
+
+  /* ── Build grid ── */
+  const grid = document.getElementById('photo-grid');
+  PHOTOS.forEach((src, idx) => {
+    const item = document.createElement('div');
+    item.className   = 'photo-item';
+    item.dataset.idx = idx;
+    const img    = document.createElement('img');
+    img.src      = src;
+    img.alt      = parseSrc(src).caption;
+    img.loading  = 'lazy';
+    item.appendChild(img);
+    item.addEventListener('click', () => openLb(idx));
+    grid.appendChild(item);
+  });
+
+  /* Staggered fade-in */
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      setTimeout(() => e.target.classList.add('visible'), +e.target.dataset.idx * 35);
+      o.unobserve(e.target);
+    });
+  }, { threshold: 0.04 });
+  document.querySelectorAll('.photo-item').forEach(el => obs.observe(el));
+
+  /* ── Lightbox ── */
+  let lbIdx = 0;
+
+  function alignMeta() {
+    requestAnimationFrame(() => {
+      const img    = document.getElementById('lb-img');
+      const footer = document.getElementById('lb-footer');
+      const meta   = document.getElementById('lb-meta');
+      const ir = img.getBoundingClientRect();
+      const fr = footer.getBoundingClientRect();
+      footer.style.paddingLeft = Math.max(16, ir.left - fr.left) + 'px';
+      meta.style.width = ir.width + 'px';
+    });
+  }
+
+  function openLb(idx) {
+    lbIdx = idx; updateLb();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function navLb(dir) {
+    lbIdx = (lbIdx + dir + PHOTOS.length) % PHOTOS.length;
+    updateLb();
+  }
+  function updateLb() {
+    const { caption, date } = parseSrc(PHOTOS[lbIdx]);
+    const img = document.getElementById('lb-img');
+    img.src = PHOTOS[lbIdx]; img.alt = caption;
+    img.onload = alignMeta;
+    if (img.complete) alignMeta();
+    document.getElementById('lb-caption').textContent = caption;
+    document.getElementById('lb-date').textContent    = date;
+    document.getElementById('lb-count').textContent   = (lbIdx + 1) + ' / ' + PHOTOS.length;
+  }
+
+  window.addEventListener('resize', () => {
+    if (document.getElementById('lightbox').classList.contains('open')) alignMeta();
+  });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft')  navLb(-1);
+    if (e.key === 'ArrowRight') navLb(1);
+    if (e.key === 'Escape')     closeLb();
+  });
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target.id === 'lightbox' || e.target.id === 'lb-stage') closeLb();
+  });
+
+  /* Swipe */
+  (function () {
+    let sx = 0, sy = 0;
+    const lb = document.getElementById('lightbox');
+    lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    lb.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) navLb(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }());
+</script>
+<script src="/assets/js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Diary</title>
+  <meta name="description" content="An interactive world map tracking every country Florian Preis has visited.">
+  <meta property="og:title"       content="Travel Diary — Florian Preis">
+  <meta property="og:description" content="An interactive world map tracking every country I visited.">
+  <meta property="og:url"         content="https://preis.works/projects/travel-diary/">
+  <meta property="og:image"       content="https://preis.works/assets/travel-cover.jpg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Cg transform='translate(5%2C5) scale(0.70)'%3E%3Cpath fill='%23ddd' stroke='%23555' stroke-width='0.6' d='M29.37%2C14.75%2C20%2C10V6a4%2C4%2C0%2C0%2C0-8%2C0v4L2.63%2C14.75a1%2C1%2C0%2C0%2C0-.63.93v5a1%2C1%2C0%2C0%2C0%2C1%2C1%2C1%2C1%2C0%2C0%2C0%2C.29-.05L12%2C18v5L8.55%2C24.72a1%2C1%2C0%2C0%2C0-.55.9V29a1%2C1%2C0%2C0%2C0%2C1%2C1%2C.9.9%2C0%2C0%2C0%2C.28%2C0L16%2C28l6.72%2C2A.9.9%2C0%2C0%2C0%2C23%2C30a1%2C1%2C0%2C0%2C0%2C1-1V25.62a1%2C1%2C0%2C0%2C0-.55-.9L20%2C23V18l8.71%2C3.61a1%2C1%2C0%2C0%2C0%2C.29.05%2C1%2C1%2C0%2C0%2C0%2C1-1v-5A1%2C1%2C0%2C0%2C0%2C29.37%2C14.75Z'/%3E%3C/g%3E%3C/svg%3E">
+  <link href="https://cdn.jsdelivr.net/npm/mapbox-gl@3.5.1/dist/mapbox-gl.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mapbox-gl@3.5.1/dist/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div id="cursor">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <path d="M29.37,14.75,20,10V6a4,4,0,0,0-8,0v4L2.63,14.75a1,1,0,0,0-.63.93v5a1,1,0,0,0,1,1,1,1,0,0,0,.29-.05L12,18v5L8.55,24.72a1,1,0,0,0-.55.9V29a1,1,0,0,0,1,1,.9.9,0,0,0,.28,0L16,28l6.72,2A.9.9,0,0,0,23,30a1,1,0,0,0,1-1V25.62a1,1,0,0,0-.55-.9L20,23V18l8.71,3.61a1,1,0,0,0,.29.05,1,1,0,0,0,1-1v-5A1,1,0,0,0,29.37,14.75Z"/>
+  </svg>
+</div>
+
+<div id="loader">
+  <video id="loader-video" autoplay muted playsinline preload="auto"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.4;">
+    <source src="/assets/travel-loading.mp4" type="video/mp4">
+  </video>
+  <div id="loader-content">
+    <div id="loader-headline">Travel Diary</div>
+    <div id="loader-track"><div id="loader-bar"></div></div>
+    <div id="loader-pct">0%</div>
+  </div>
+</div>
+
+<div id="map"></div>
+<div id="title-banner">Travel Diary</div>
+
+<div id="tooltip"></div>
+
+<div id="panel">
+  <div class="p-count">
+    <span class="p-count-num" id="visited-count">0</span>
+    <span class="p-count-denom">&thinsp;/ 197</span>
+    <span class="p-count-info">i
+      <span class="p-count-tip"><strong>Why 197?</strong><br>This count includes the 193 UN member states, plus Kosovo, Palestine, Taiwan, and Vatican City, territories widely recognised as countries despite varying levels of formal diplomatic status.</span>
+    </span>
+  </div>
+  <div class="p-label">Countries visited</div>
+  <div class="p-legend">
+    <div class="legend-row"><div class="fog-swatch fog-visited"></div>Visited</div>
+    <div class="legend-row"><div class="fog-swatch fog-unvisited"></div>Not yet</div>
+  </div>
+  <div class="p-divider"></div>
+  <div class="p-zoom">
+    <button class="z-btn" id="z-in">+</button>
+    <button class="z-btn" id="z-out">&#8722;</button>
+  </div>
+  <div class="p-hint">Click any country for details<span id="flight-hint">, right-click two points to measure air distance</span></div>
+</div>
+
+<div id="drawer">
+  <div class="dh">
+    <div class="dh-flag-wrap">
+      <img class="dh-flag flag-rect" id="d-flag" src="" alt="">
+    </div>
+    <div class="dh-text">
+      <div class="dh-name" id="d-name"></div>
+      <div id="d-badge"></div>
+    </div>
+    <button class="dh-close" id="d-close">&#215;</button>
+  </div>
+  <div class="db" id="d-body"></div>
+</div>
+
+<div id="flight-label"></div>
+
+<script src="./app.js"></script>
+</body>
+</html>

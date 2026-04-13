@@ -1,0 +1,205 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cogniflow</title>
+  <meta name="description" content="A focused reading environment — word-by-word, at your pace. Supports EPUB, PDF, and plain text.">
+  <meta property="og:title"       content="cogniflow">
+  <meta property="og:description" content="A focused reading environment — word-by-word, at your pace.">
+  <meta property="og:url"         content="https://preis.works/projects/cogniflow/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23000'/><text x='50%25' y='23' text-anchor='middle' font-family='Helvetica Neue,Helvetica,Arial,sans-serif' font-size='19' fill='white'><tspan font-weight='700'>c</tspan><tspan font-weight='400'>f</tspan></text></svg>">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#" class="logo" id="logoLink"><strong>cogni</strong>flow</a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#" id="readerLink"  class="nav-active">Reader</a></li>
+        <li><a href="#" id="libraryLink">Library</a></li>
+        <li><a href="#" id="aboutLink">About</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" id="mReaderLink"  class="mobile-link nav-active">Reader</a>
+    <a href="#" id="mLibraryLink" class="mobile-link">Library</a>
+    <a href="#" id="mAboutLink"   class="mobile-link">About</a>
+  </div>
+
+  <div class="main-content">
+
+    <!-- READER SECTION -->
+    <div id="readerSection" class="page-section active">
+      <div class="reader-layout" id="readerLayout">
+
+        <!-- Upload: full width -->
+        <div class="upload-section">
+          <div class="upload-tabs">
+            <button class="upload-tab active" id="tabFile">Upload File</button>
+            <button class="upload-tab" id="tabPaste">Paste Text</button>
+          </div>
+          <div class="upload-panel active" id="panelFile">
+            <input type="file" id="fileInput" accept=".epub,.txt,.pdf,.docx,.html,.htm,.rtf">
+            <div class="file-size-note">Supports EPUB, TXT, PDF, DOCX, HTML, RTF &middot; Max 10 MB</div>
+          </div>
+          <div class="upload-panel" id="panelPaste">
+            <textarea class="paste-area" id="pasteArea" placeholder="Paste or type your text here…" rows="5"></textarea>
+            <div class="paste-actions">
+              <button class="btn-paste-load btn-play" id="pasteLoadBtn">Load Text</button>
+              <button class="btn-paste-clear" id="pasteClearBtn">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reader body: chapter nav + reading pane side by side -->
+        <div class="reader-body">
+
+          <div class="chapter-navigation" id="chapterNav">
+            <h3>Chapters</h3>
+            <ul class="chapter-list" id="chapterList"></ul>
+          </div>
+
+          <!-- Reading pane -->
+          <div class="reader-right reader-panel">
+
+            <!-- Word display -->
+            <div class="display-area">
+              <div class="word-display" id="wordDisplay">
+                Upload a file or paste text to begin
+              </div>
+            </div>
+
+            <!-- Buttons + progress -->
+            <div class="buttons-row">
+              <button class="btn-playpause" id="playPauseBtn" disabled>Play</button>
+              <button class="btn-rewind"    id="rewindBtn"    disabled title="← 10 words">← 10</button>
+              <button class="btn-forward"   id="forwardBtn"   disabled title="→ 10 words">10 →</button>
+              <button class="btn-reset"     id="resetBtn"     disabled>Reset</button>
+              <button class="btn-save"      id="saveBtn"      disabled>Save</button>
+              <div class="progress-area">
+                <div class="progress-bars">
+                  <div class="progress-row">
+                    <span class="progress-label" id="bookProgressLabel">Book</span>
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                    <span class="progress-pct" id="progressPct">0%</span>
+                  </div>
+                  <div class="progress-row" id="chapterProgressRow" style="display:none">
+                    <span class="progress-label">Chapter</span>
+                    <div class="progress-bar"><div class="progress-fill chapter-fill" id="chapterProgressFill"></div></div>
+                    <span class="progress-pct" id="chapterProgressPct">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls: speed / font / bionic -->
+            <div class="controls-row">
+              <div class="control-group">
+                <label for="speedSlider">Reading Speed</label>
+                <div class="control-inner">
+                  <div class="speed-control">
+                    <input type="range" id="speedSlider" min="25" max="1000" value="300" step="25">
+                    <span class="speed-value" id="speedValue">300 WPM</span>
+                  </div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Reading Font</label>
+                <div class="control-inner">
+                  <button id="fontToggleBtn" class="font-toggle-btn serif-active">
+                    <span class="font-toggle-pill"></span>
+                    <span class="font-toggle-label font-label-serif">Serif</span>
+                    <span class="font-toggle-label font-label-sans">Sans</span>
+                  </button>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Bionic Reading</label>
+                <div class="control-inner">
+                  <div class="toggle-group">
+                    <span class="toggle-desc">Fixation emphasis</span>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="bionicToggle" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Keyboard hint -->
+            <div class="keyboard-hint">
+              <span><span class="key">Space</span>Play / Pause</span>
+              <span><span class="key">←</span><span class="key">→</span>Skip 10 words</span>
+              <span><span class="key">↑</span><span class="key">↓</span>Speed ±25 WPM</span>
+            </div>
+
+          </div><!-- /reader-right -->
+        </div><!-- /reader-body -->
+      </div><!-- /reader-layout -->
+    </div><!-- /readerSection -->
+
+    <!-- LIBRARY SECTION -->
+    <div id="librarySection" class="page-section">
+      <h1 style="color:#fff;font-size:3em;font-weight:400;letter-spacing:-0.03em;margin-bottom:16px;">Library</h1>
+      <div id="libraryContent">
+        <div class="empty-library">
+          <h2>Your library is empty</h2>
+          <p>Save books from the reader to build your collection</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <div id="aboutSection" class="page-section">
+      <div class="about-content">
+        <h1>Reading, reimagined</h1>
+        <p>Cogniflow rethinks how written content is experienced. By applying insights from cognitive science and human–computer interaction, it helps readers move through text more efficiently, without sacrificing comprehension.</p>
+        <h2>RSVP Technology</h2>
+        <p>Rapid Serial Visual Presentation keeps words in a fixed visual position, reducing the need for eye movement across lines and pages. This allows readers to maintain focus and sustain higher reading speeds, particularly for long-form content.</p>
+        <h2>Bionic Reading</h2>
+        <p>Subtle visual emphasis within words creates natural fixation points for the eye. These anchors support faster word recognition, reduce cognitive strain, and help maintain attention during extended reading sessions.</p>
+        <h2>Local Library</h2>
+        <p>Save books to your personal library as you read. Progress is stored locally in your browser, so you can pause and resume at any time without losing your place. No account required. Everything stays on your device.</p>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 cogniflow</span>
+    </div>
+  </footer>
+
+  <!-- Delete confirm modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h3>Remove from library?</h3>
+      <p id="deleteModalMsg">This will permanently remove the book from your library.</p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="deleteCancelBtn">Cancel</button>
+        <button class="btn-modal-delete" id="deleteConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
